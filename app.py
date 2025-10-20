@@ -10,12 +10,18 @@ import os
 app = Flask(__name__)
 
 # Load the trained model, scaler, and metadata
-MODEL_PATH = 'model/cholesterol_model.pkl'
-SCALER_PATH = 'model/scaler.pkl'
-FEATURES_PATH = 'model/feature_names.pkl'
-METADATA_PATH = 'model/metadata.pkl'
+# Use absolute paths for deployment compatibility
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, 'model', 'cholesterol_model.pkl')
+SCALER_PATH = os.path.join(BASE_DIR, 'model', 'scaler.pkl')
+FEATURES_PATH = os.path.join(BASE_DIR, 'model', 'feature_names.pkl')
+METADATA_PATH = os.path.join(BASE_DIR, 'model', 'metadata.pkl')
 
 try:
+    print(f"🔍 Looking for models in: {BASE_DIR}")
+    print(f"   Model path: {MODEL_PATH}")
+    print(f"   Model exists: {os.path.exists(MODEL_PATH)}")
+    
     model = joblib.load(MODEL_PATH)
     scaler = joblib.load(SCALER_PATH)
     feature_names = joblib.load(FEATURES_PATH)
@@ -25,6 +31,10 @@ try:
     print(f"   Predicts: {metadata['target']} ({metadata['unit']})")
 except Exception as e:
     print(f"❌ Error loading model: {e}")
+    print(f"   Current directory: {os.getcwd()}")
+    print(f"   Files in current dir: {os.listdir('.')}")
+    if os.path.exists('model'):
+        print(f"   Files in model dir: {os.listdir('model')}")
     print("Please run 'python train_model.py' first to train the model.")
     model = None
     scaler = None
