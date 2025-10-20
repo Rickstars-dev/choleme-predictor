@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CholeME - Cholesterol Predictor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            height: 100vh;
+            background: linear-gradient(135deg, #c31432 0%, #240b36 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Animated background particles */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 15s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(50px);
+                opacity: 0;
+            }
+        }
+
+        .logo-container {
+            text-align: center;
+            animation: fadeInDown 1.5s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo-main {
+            font-size: 120px;
+            font-weight: 900;
+            color: white;
+            text-shadow: 0 0 40px rgba(195, 20, 50, 0.8);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            letter-spacing: -5px;
+        }
+
+        .logo-chole {
+            display: inline-block;
+        }
+
+        .logo-me-container {
+            display: inline-block;
+            position: relative;
+            margin-top: 0;
+        }
+
+        /* Cholesterol drop shape containing ME */
+        .blood-drop {
+            position: relative;
+            width: 130px;
+            height: 170px;
+            background: linear-gradient(180deg, rgba(255, 215, 0, 0.7) 0%, rgba(255, 165, 0, 0.7) 100%);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.5),
+                        inset 0 -20px 40px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Glossy effect on cholesterol drop */
+        .blood-drop::before {
+            content: '';
+            position: absolute;
+            top: 35px;
+            left: 35px;
+            width: 35px;
+            height: 35px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            filter: blur(10px);
+        }
+
+        .logo-me {
+            position: relative;
+            z-index: 2;
+            color: white;
+            font-size: 80px;
+            font-weight: 900;
+            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            letter-spacing: -3px;
+        }
+
+
+
+        .tagline {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 80px;
+            letter-spacing: 3px;
+            animation: fadeIn 2s ease-out 0.5s both;
+        }
+
+        .creator-name {
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 20px;
+            font-weight: 300;
+            animation: fadeIn 2s ease-out 1s both;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator::before {
+            content: '↓';
+            font-size: 40px;
+            color: white;
+            opacity: 0.6;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                transform: translateX(-50%) translateY(20px);
+            }
+        }
+
+        /* Info Section */
+        .info-section {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #240b36 0%, #1a0524 100%);
+            padding: 100px 20px;
+            position: relative;
+        }
+
+        .info-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-title {
+            font-size: 48px;
+            color: white;
+            text-align: center;
+            margin-bottom: 60px;
+            text-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+        }
+
+        .data-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 80px;
+        }
+
+        .data-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 107, 107, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .data-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(195, 20, 50, 0.1) 0%, rgba(255, 107, 107, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .data-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255, 107, 107, 0.8);
+            box-shadow: 0 20px 60px rgba(195, 20, 50, 0.4);
+        }
+
+        .data-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 24px;
+            color: #ff6b6b;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-text {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* CTA Button Section */
+        .cta-section {
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .cta-text {
+            font-size: 28px;
+            color: white;
+            margin-bottom: 40px;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                text-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+            }
+            50% {
+                text-shadow: 0 0 40px rgba(255, 107, 107, 0.8);
+            }
+        }
+
+        /* Fillable Button */
+        .fill-button {
+            position: relative;
+            width: 300px;
+            height: 80px;
+            margin: 0 auto;
+            cursor: pointer;
+            border: 3px solid #ff6b6b;
+            border-radius: 50px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .fill-button:hover {
+            box-shadow: 0 0 40px rgba(255, 107, 107, 0.6);
+            transform: scale(1.05);
+        }
+
+        .button-fill {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 0%;
+            background: linear-gradient(0deg, #c31432 0%, #ff6b6b 100%);
+            transition: height 0.1s linear;
+            pointer-events: none;
+        }
+
+        .button-text {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            font-size: 20px;
+            font-weight: 600;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            pointer-events: none;
+        }
+
+        .button-instruction {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 20px;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo-main {
+                font-size: 60px;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            
+            .blood-drop {
+                width: 90px;
+                height: 120px;
+            }
+            
+            .logo-me {
+                font-size: 50px;
+            }
+            
+            .logo-me {
+                font-size: 50px;
+            }
+            
+            .tagline {
+                font-size: 14px;
+                margin-top: 60px;
+            }
+            
+            .creator-name {
+                font-size: 18px;
+            }
+            
+            .section-title {
+                font-size: 32px;
+            }
+            
+            .data-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero-section" id="hero">
+        <!-- Animated particles -->
+        <script>
+            for(let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                document.querySelector('.hero-section').appendChild(particle);
+            }
+        </script>
+
+        <div class="logo-container">
+            <h1 class="logo-main">
+                <span class="logo-chole">Chole</span>
+                <span class="logo-me-container">
+                    <div class="blood-drop">
+                        <span class="logo-me">ME</span>
+                    </div>
+                </span>
+            </h1>
+            <p class="tagline">PREDICT YOUR CHOLESTEROL LEVEL</p>
+            <p class="creator-name">by Abhishek Chandra</p>
+        </div>
+
+        <div class="scroll-indicator"></div>
+    </section>
+
+    <!-- Info Section -->
+    <section class="info-section" id="info">
+        <div class="info-container">
+            <h2 class="section-title">Built on Real Medical Data</h2>
+
+            <div class="data-cards">
+                <div class="data-card">
+                    <div class="card-icon">📊</div>
+                    <h3 class="card-title">68,546 Real Patients</h3>
+                    <p class="card-text">
+                        Trained on a comprehensive cardiovascular disease dataset 
+                        containing real patient records from medical studies.
+                    </p>
+                </div>
+
+                <div class="data-card">
+                    <div class="card-icon">🤖</div>
+                    <h3 class="card-title">Machine Learning</h3>
+                    <p class="card-text">
+                        Uses advanced Random Forest regression algorithm 
+                        with sophisticated cross-validation for accurate predictions.
+                    </p>
+                </div>
+
+                <div class="data-card">
+                    <div class="card-icon">🩺</div>
+                    <h3 class="card-title">11 Health Factors</h3>
+                    <p class="card-text">
+                        Analyzes age, gender, BMI, blood pressure, lifestyle habits, 
+                        and metabolic markers to predict cholesterol levels.
+                    </p>
+                </div>
+
+                <div class="data-card">
+                    <div class="card-icon">🎯</div>
+                    <h3 class="card-title">±17 mg/dL Accuracy</h3>
+                    <p class="card-text">
+                        Average prediction error of just 17 mg/dL with 
+                        8.22% mean absolute percentage error.
+                    </p>
+                </div>
+
+                <div class="data-card">
+                    <div class="card-icon">💉</div>
+                    <h3 class="card-title">Clinical Ranges</h3>
+                    <p class="card-text">
+                        Results categorized using AHA/ACC guidelines: 
+                        Desirable (<200), Borderline (200-239), High (≥240).
+                    </p>
+                </div>
+
+                <div class="data-card">
+                    <div class="card-icon">🔬</div>
+                    <h3 class="card-title">Scientific Approach</h3>
+                    <p class="card-text">
+                        Based on proven cardiovascular research with 
+                        cross-validated model performance.
+                    </p>
+                </div>
+            </div>
+
+            <div class="cta-section">
+                <p class="cta-text">Ready to Check Your Cholesterol?</p>
+                
+                <div class="fill-button" id="fillButton">
+                    <div class="button-fill" id="buttonFill"></div>
+                    <div class="button-text">Press & Hold</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const fillButton = document.getElementById('fillButton');
+        const buttonFill = document.getElementById('buttonFill');
+        let fillInterval;
+        let fillPercentage = 0;
+
+        fillButton.addEventListener('mousedown', startFilling);
+        fillButton.addEventListener('touchstart', startFilling);
+        fillButton.addEventListener('mouseup', stopFilling);
+        fillButton.addEventListener('touchend', stopFilling);
+        fillButton.addEventListener('mouseleave', stopFilling);
+
+        function startFilling(e) {
+            e.preventDefault();
+            fillInterval = setInterval(() => {
+                fillPercentage += 3;
+                buttonFill.style.height = fillPercentage + '%';
+
+                if (fillPercentage >= 100) {
+                    clearInterval(fillInterval);
+                    // Redirect to prediction page
+                    window.location.href = '/predict-page';
+                }
+            }, 40);
+        }
+
+        function stopFilling() {
+            clearInterval(fillInterval);
+            // Drain the button
+            let drainInterval = setInterval(() => {
+                fillPercentage -= 5;
+                if (fillPercentage <= 0) {
+                    fillPercentage = 0;
+                    clearInterval(drainInterval);
+                }
+                buttonFill.style.height = fillPercentage + '%';
+            }, 30);
+        }
+
+        // Smooth scroll
+        document.querySelector('.scroll-indicator').addEventListener('click', () => {
+            document.getElementById('info').scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
